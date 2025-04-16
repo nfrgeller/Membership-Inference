@@ -38,11 +38,11 @@ if __name__ == "__main__":
     # Process the full dataset
     processed_cifar10 = data.map(cifar10_scale_and_flatten, features=cifar10_features)
     
-    # Create Cifar_in (dataset without the removed image)
-    cifar_in = processed_cifar10.filter(lambda x, idx: idx != 0, with_indices=True)
+    # Create Cifar_in (full dataset)
+    cifar_in = processed_cifar10
     
-    # Create Cifar_out (dataset with only the removed image)
-    cifar_out = processed_cifar10.filter(lambda x, idx: idx == 0, with_indices=True)
+    # Create Cifar_out (full dataset except the removed image)
+    cifar_out = processed_cifar10.filter(lambda x, idx: idx != 0, with_indices=True)
     
     # Save both datasets
     cifar_in.save_to_disk("./data/processed/cifar_in")

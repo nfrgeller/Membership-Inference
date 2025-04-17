@@ -19,7 +19,7 @@ if __name__ == "__main__":
     # Load the dataset
     data = load_dataset("uoft-cs/cifar10", cache_dir="./data/raw")
     
-    # Select one image to remove (we'll use the first image from the training set)
+    # Select one image to remove (the first image from the training set)
     image_to_remove = data["train"][0]
     
     # Save the image as PNG
@@ -38,10 +38,10 @@ if __name__ == "__main__":
     # Process the full dataset
     processed_cifar10 = data.map(cifar10_scale_and_flatten, features=cifar10_features)
     
-    # Create Cifar_in (full dataset)
+    # Create cifar_in (full dataset)
     cifar_in = processed_cifar10
     
-    # Create Cifar_out (full dataset except the removed image)
+    # Create cifar_out (full dataset except the removed image)
     cifar_out = processed_cifar10.filter(lambda x, idx: idx != 0, with_indices=True)
     
     # Save both datasets

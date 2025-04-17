@@ -165,22 +165,20 @@ class SupervisedAutoEncoder(nn.Module):
             total_recon_loss = 0.0
             total_pred_loss = 0.0
             self.eval()
-            for data in track(validation_data):
-                image = data[self.x_key]
-                label = data["label"]
-                reconstruction, logits = self(image)
-                loss, recon_loss, pred_loss = self.loss_fn(
-                    image, label, reconstruction, logits
-                )
-                total_loss += loss.item()
-                total_recon_loss += recon_loss.item()
-                total_pred_loss += pred_loss.item()
-                loss.backward()
-                optimizer.step()
-                optimizer.zero_grad()
-            self.validation_losses.append(total_loss / len(validation_data))
-            self.validation_recon_losses.append(total_recon_loss / len(validation_data))
-            self.validation_pred_losses.append(total_pred_loss / len(validation_data))
+            with torch.no_grad():
+                for data in track(validation_data):
+                    image = data[self.x_key]
+                    label = data["label"]
+                    reconstruction, logits = self(image)
+                    loss, recon_loss, pred_loss = self.loss_fn(
+                        image, label, reconstruction, logits
+                    )
+                    total_loss += loss.item()
+                    total_recon_loss += recon_loss.item()
+                    total_pred_loss += pred_loss.item()
+                self.validation_losses.append(total_loss / len(validation_data))
+                self.validation_recon_losses.append(total_recon_loss / len(validation_data))
+                self.validation_pred_losses.append(total_pred_loss / len(validation_data))
 
         self.training_accuracy = self.accuracy(training_data)
         self.testing_accuracy = self.accuracy(validation_data)

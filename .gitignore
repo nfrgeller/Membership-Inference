@@ -9,6 +9,7 @@ wheels/
 /trained_models/
 /reports/
 .DS_STORE
-
+*.ipynb
+/.ipynb_checkpoints/
 # Virtual environments
 .venv
